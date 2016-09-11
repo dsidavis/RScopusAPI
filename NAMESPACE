@@ -1,0 +1,17 @@
+#exportPattern(".*")
+
+export(getDoc, getDocInfo)
+
+export(subjectClassifications)
+export(getAuthorID, getAuthorDocs, getAuthorDocsIds, scoGetAuthor, scopusAuthorSearch, authorRetrieval)
+
+export(getArticleText)
+
+export(scoAffiliation, getArticlesByAffiliation)
+
+export(scopusQuery, buildQuery)
+
+export(searchScopus)
+
+
+export(coAuthors)
