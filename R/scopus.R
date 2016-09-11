@@ -435,6 +435,8 @@ browser()
 
 
 coAuthors =
+# z = coAuthors("35578120000")
+# me.co = coAuthors(c("Temple Lang", "Duncan"))
 function(person, key = getOption("ScopusKey", stop("need the scopus API key")), curl = getCurlHandle(), url = "http://api.elsevier.com/content/search/author")
 {
      if(length(person) == 2)
@@ -442,5 +444,26 @@ function(person, key = getOption("ScopusKey", stop("need the scopus API key")), 
      else
          id = gsub("SCOPUS_ID:", "", person)
 
-     scopusQuery('co-author' = id, url = url, curl = curl)
+     ans = scopusQuery('co-author' = id, url = url, curl = curl)
+     collectAuthorsInfo(ans)
+}
+
+
+collectAuthorsInfo =
+function(x, ...)
+{
+  lapply(x, collectAuthorInfo, ...)
+}
+
+collectAuthorInfo =
+function(x, ...)
+{
+  ans = unlist( x[ c("dc:identifier", "eid", "preferred-name", "document-count") ] )
+  sa = x[["subject-area"]]
+  ans["subject-area"] = if(is.character(sa))
+                           sa["@abbrev"]
+                        else
+                           paste(sapply(sa, `[[`, "@abbrev"), collapse = ",")
+
+  ans
 }
