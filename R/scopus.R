@@ -224,6 +224,9 @@ function(..., url, max = NA, curl = getCurlHandle(), key = getOption("ScopusKey"
 {
   .opts$httpheader = c('X-ELS-APIKey' = key)
   ans = getForm(url, .params = .params, .opts = .opts, curl = curl)
+  if("httpAccept" %in% names(list(...)) && grepl("xml$", list(...)[["httpAccept"]]))
+     return(xmlParse(ans))
+  
   res = fromJSON(ans)
   getNextPages(res, res, max = max, url = url, curl = curl)
 }

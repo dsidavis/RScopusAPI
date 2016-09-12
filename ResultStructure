@@ -1,0 +1,156 @@
+[Check] 
+Each of these files corresponds to a scopus id.
+In this case, the scopus id was the single ID returned for the query of an author's name.
+In other cases, we got multiple ids back for querying the author's name meaning
+there are multiple individuals with the same name, or that a single individual has multiple scopus IDs
+(less likely but possible).
+
+Each RDS file contains publications for that person (scopus ID).
+
+ff = list.files("../OneIDDocs_150/", full.names = TRUE)
+zz = lapply(ff[1:20], readRDS)
+sapply(zz, length)
+
+The publications have the following elements
+o = unlist(lapply(zz, function(x) unlist(lapply(x, names))))
+table(o)
+  affiliation  authkeywords       authors      coredata      idxterms          item      language subject-areas 
+          850           998           998           998           998           998           998           998 
+
+and affiliation is not in all of the publications.
+
+
+
+An affiliation has elements named
+```
+              @href                 @id    affiliation-city affiliation-country           affilname 
+```
+and looks like
+```                                                                @href 
+"http://api.elsevier.com/content/affiliation/affiliation_id/60014439" 
+                                                                  @id 
+                                                           "60014439" 
+                                                            affilname 
+                                                           "UC Davis" 
+                                                     affiliation-city 
+                                                              "Davis" 
+                                                  affiliation-country 
+                                                      "United States" 
+```
+
+```
+f = 
+function(fieldName = "affiliation", els = zz)
+{
+  o = unlist(lapply(zz, function(x) lapply(x, `[[`, fieldName)), recursive =FALSE)
+  table(unlist(sapply(o[!sapply(o, is.null)], names)))
+}
+
+g = 
+function(fieldName = "affiliation", els = zz)
+{
+  o = unlist(lapply(zz, function(x) lapply(x, `[[`, fieldName)), recursive =FALSE)
+  o[!sapply(o, is.null)]
+}
+```
+
+authkeywords are made up of auth-keyword elements or NULL
+```f("authkeywords")
+author-keyword 
+           230 
+```
+
+
+With the authors element, we have an author  element and then	
+```
+List of 1
+ $ author:List of 3
+  ..$ :List of 10
+  .. ..$ @_fa           : chr "true"
+  .. ..$ @auid          : chr "16049933800"
+  .. ..$ @seq           : chr "1"
+  .. ..$ ce:initials    : chr "G."
+  .. ..$ ce:indexed-name: chr "Zweifel G."
+  .. ..$ ce:surname     : chr "Zweifel"
+  .. ..$ ce:given-name  : chr "George"
+  .. ..$ preferred-name : Named chr [1:4] "G." "Zweifel G." "Zweifel" "George"
+  .. .. ..- attr(*, "names")= chr [1:4] "ce:initials" "ce:indexed-name" "ce:surname" "ce:given-name"
+  .. ..$ author-url     : chr "http://api.elsevier.com/content/author/author_id/16049933800"
+  .. ..$ affiliation    : Named chr [1:2] "http://api.elsevier.com/content/affiliation/affiliation_id/60009254" "60009254"
+  .. .. ..- attr(*, "names")= chr [1:2] "@href" "@id"
+  ..$ :List of 10
+  .. ..$ @_fa           : chr "true"
+  .. ..$ @auid          : chr "7003332558"
+  .. ..$ @seq           : chr "2"
+  .. ..$ ce:initials    : chr "N.R."
+  .. ..$ ce:indexed-name: chr "Ayyangar N.R."
+  .. ..$ ce:surname     : chr "Ayyangar"
+  .. ..$ ce:given-name  : chr "Nagaraj R."
+  .. ..$ preferred-name : Named chr [1:4] "N.R." "Ayyangar N." "Ayyangar" "Nagaraj R."
+  .. .. ..- attr(*, "names")= chr [1:4] "ce:initials" "ce:indexed-name" "ce:surname" "ce:given-name"
+  .. ..$ author-url     : chr "http://api.elsevier.com/content/author/author_id/7003332558"
+  .. ..$ affiliation    : Named chr [1:2] "http://api.elsevier.com/content/affiliation/affiliation_id/60009254" "60009254"
+  .. .. ..- attr(*, "names")= chr [1:2] "@href" "@id"
+  ..$ :List of 10
+  .. ..$ @_fa           : chr "true"
+  .. ..$ @auid          : chr "24524574500"
+  .. ..$ @seq           : chr "3"
+  .. ..$ ce:initials    : chr "H.C."
+  .. ..$ ce:indexed-name: chr "Brown H.C."
+  .. ..$ ce:surname     : chr "Brown"
+  .. ..$ ce:given-name  : chr "Herbert C."
+  .. ..$ preferred-name : Named chr [1:4] "H.C." "Brown H." "Brown" "Herbert C."
+  .. .. ..- attr(*, "names")= chr [1:4] "ce:initials" "ce:indexed-name" "ce:surname" "ce:given-name"
+  .. ..$ author-url     : chr "http://api.elsevier.com/content/author/author_id/24524574500"
+  .. ..$ affiliation    : Named chr [1:2] "http://api.elsevier.com/content/affiliation/affiliation_id/60009254" "60009254"
+  .. .. ..- attr(*, "names")= chr [1:2] "@href" "@id"
+```
+
+
+
+
+```
+f("coredata")
+
+       article-number         citedby-count            dc:creator        dc:description         dc:identifier 
+                    9                   998                   998                   714                   998 
+         dc:publisher              dc:title                   eid                 intid                  link 
+                  100                   998                   998                   998                   998 
+prism:aggregationType       prism:coverDate             prism:doi      prism:endingPage            prism:isbn 
+                  998                   998                   398                   919                    17 
+           prism:issn prism:issueIdentifier       prism:pageRange prism:publicationName    prism:startingPage 
+                  965                   920                   919                   997                   954 
+            prism:url          prism:volume             pubmed-id             source-id               srctype 
+                  998                   968                   605                   998                   998 
+```
+
+
+idxterms
+
+Only a mainterm or nothing.
+And a mainterm looks like
+```
+                 @candidate                     @weight                           $ 
+                        "n"                         "b" "Superficial zone proteins" 
+```
+
+
+
+item
+ait:process-info        bibrecord 
+             998              998 
+
+
+For the language, 
+@xml:lang 
+      998 
+
+
+For subject-areas, we have a subject-area
+and these look like
+```
+$`subject-area`[[2]]
+          @_fa        @abbrev          @code              $ 
+        "true"         "AGRI"         "1108" "Horticulture" 
+```
+
