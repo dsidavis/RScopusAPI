@@ -1,4 +1,6 @@
 #exportPattern(".*")
+import(RJSONIO)
+import(RCurl)
 
 export(getDoc, getDocInfo)
 
