@@ -234,7 +234,7 @@ function(..., url, max = NA, curl = getCurlHandle(), key = getOption("ScopusKey"
 
 getNextPages = 
 function(ans, ..., url, max = NA, curl = getCurlHandle(), key = getOption("ScopusKey", stop("need the scopus API key")), .opts = list(), 
-         .varName = "scopusResults", verbose = getOption("Scopus.verbose", TRUE))
+         .varName = NA, verbose = getOption("Scopus.verbose", TRUE))
 {
     info = ans[[1]]
     if(!("opensearch:totalResults" %in% names(info)))
