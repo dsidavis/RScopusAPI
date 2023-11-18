@@ -1,6 +1,6 @@
-library(RCurl)
-library(XML)
-library(RJSONIO)
+#library(RCurl)
+#library(XML)
+#library(RJSONIO)
 
 buildQuery =
 function(parameters)
@@ -225,10 +225,11 @@ function(..., url, max = NA, curl = getCurlHandle(), key = getOption("ScopusKey"
   .opts$httpheader = c('X-ELS-APIKey' = key)
   ans = getForm(url, .params = .params, .opts = .opts, curl = curl)
   if("httpAccept" %in% names(list(...)) && grepl("xml$", list(...)[["httpAccept"]]))
+       #XXX Need to process next pages - getNextPages()
      return(xmlParse(ans))
   
   res = fromJSON(ans)
-  getNextPages(res, res, max = max, url = url, curl = curl)
+  getNextPages(res, max = max, url = url, curl = curl)
 }
 
 
