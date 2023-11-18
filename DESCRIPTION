@@ -5,7 +5,7 @@ Description: This provides ways for one to query information
  about citations, abstracts, authors, affiliations and institutions
  in the Scopus database.
 Author: Duncan Temple Lang
-Imports: RJSONIO, RCurl
+Imports: RJSONIO, RCurl, XML
 License: BSD 3 paragraph, no advertising.
 Note: see rscopus on CRAN.  This was created before that project was started, I believe
     but was here as part of the UC Davis DSI git repos.
